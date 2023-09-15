@@ -23,6 +23,18 @@ describe('testa products service', function () {
     expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });
   });
 
+  it('testa se o service cria um produto', async function () {
+    sinon.stub(productsModel, 'create').resolves(productsMock[0]);
+    const result = await productsService.create(productsMock[0]);
+    expect(result).to.be.deep.equal({ status: 'CREATED', result: productsMock[0] });
+  });
+
+  it('testa se o service retorna um erro quando não encontra o produto para atualizar', async function () {
+    sinon.stub(productsModel, 'update').resolves(null);
+    const result = await productsService.update({ id: 1, name: 'Martelo da Arlequina' });
+    expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });
+  });
+
   afterEach(function () {
     sinon.restore();
   });

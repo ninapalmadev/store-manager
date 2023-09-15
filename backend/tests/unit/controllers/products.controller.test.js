@@ -39,6 +39,36 @@ describe('verifica se o controller de produtos retorna um produto', function () 
       expect(res.json).to.have.been.calledWith(products.productsMock[1]);
     });
 
+    it('testa se o controller retorna um erro caso o produto não exista', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'getById').resolves(products.notFound);
+      await productsController.getById(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });  
+
+    it('testa se o controller cria um produto', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'Caneca do Iron Man',
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'create').resolves(products.created);
+      await productsController.create(req, res);
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith(products.productsMock[0]);
+    });
+
     afterEach(function () {
       sinon.restore();
     });
