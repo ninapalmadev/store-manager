@@ -23,6 +23,28 @@ describe('testa sales service', function () {
     expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Sale not found' } });
   });
 
+  it('testa se o service cria uma venda válida', async function () {
+    sinon.stub(salesModel, 'createData').resolves(1);
+    sinon.stub(salesModel, 'create').resolves([{
+      productId: 1,
+      quantity: 1,
+    }]);
+    const result = await salesService.create([{
+      productId: 1,
+      quantity: 1,
+    }]);
+    expect(result).to.be.deep.equal({
+      status: 'CREATED',
+      result: {
+        id: 1,
+        itemsSold: [{
+          productId: 1,
+          quantity: 1,
+        }],
+      },
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });

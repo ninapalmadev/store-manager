@@ -17,6 +17,12 @@ describe('testa sales model', function () {
     expect(result).to.be.deep.equal(salesMockId);
   });
 
+  it('testa se o model cria uma venda', async function () {
+    sinon.stub(connection, 'execute').resolves([{ insertId: 1 }]);
+    const result = await salesModel.createData();
+    expect(result).to.be.deep.equal(1);
+  });
+
   afterEach(function () {
     sinon.restore();
   });

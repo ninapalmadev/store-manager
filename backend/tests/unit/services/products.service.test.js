@@ -36,6 +36,19 @@ describe('testa products service', function () {
     expect(result).to.be.deep.equal({ status: 'SUCCESSFUL', result: productsMock[0] });
   });
 
+  it('testa se o service remove um produto', async function () {
+    sinon.stub(productsModel, 'getById').resolves(productsMock[0]);
+    sinon.stub(productsModel, 'remove').resolves();
+    const result = await productsService.remove(1);
+    expect(result).to.be.deep.equal({ status: 'SUCCESSFUL', result: productsMock[0] });
+  });
+
+  it('testa se o service retorna um erro quando não encontra o produto para remover', async function () {
+    sinon.stub(productsModel, 'getById').resolves(null);
+    const result = await productsService.remove(1);
+    expect(result).to.be.deep.equal({ status: 'NOT_FOUND', result: { message: 'Product not found' } });
+  });
+
   afterEach(function () {
     sinon.restore();
   });

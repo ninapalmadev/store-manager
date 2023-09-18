@@ -37,9 +37,15 @@ const salesId = {
   result: salesMockId,
 };
 
+const notFound = {
+  result: { message: 'Sale not found' },
+  status: 'NOT_FOUND',
+};
+
 module.exports = {
   salesMock,
   successful,
   salesId,
   salesMockId,
+  notFound,
 };
