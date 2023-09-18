@@ -21,7 +21,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
-  const { status, result } = await productsService.update(Number(id), name);
+  const { status, result } = await productsService.update(name, Number(id));
   return res.status(mapStatusHTTP(status)).json(result);
 };
 
