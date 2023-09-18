@@ -33,6 +33,11 @@ const notFound = {
   result: { message: 'Product not found' },
 };
 
+const invalidName = {
+  status: 'INVALID_VALUE',
+  result: { message: '"name" length must be at least 5 characters long' },  
+};
+
 const created = {
   status: 'CREATED',
   result: productsMock[0],
@@ -56,4 +61,5 @@ module.exports = {
   created,
   updated,
   updatedMock,
+  invalidName,
 };

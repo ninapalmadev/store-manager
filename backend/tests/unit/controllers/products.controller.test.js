@@ -69,6 +69,64 @@ describe('verifica se o controller de produtos retorna um produto', function () 
       expect(res.json).to.have.been.calledWith(products.productsMock[0]);
     });
 
+    it('testa se o controller retorna um erro caso o produto não seja criado', async function () {
+      const res = {};
+      const req = {
+        body: {
+          name: 'RBD',
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'create').resolves(products.invalidName);
+      await productsController.create(req, res);
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+    });
+
+    it('testa se o controller retorna um erro caso o produto não seja atualizado', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          name: 'RBD',
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'update').resolves(products.invalidName);
+      await productsController.update(req, res);
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+    });
+
+    it('testa se o controller deleta um produto', async function () {
+      const req = { params: { id: 1 } };
+      const res = { end: () => {} };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'remove').resolves({ affectedRows: 1 });
+      await productsController.remove(req, res);
+      expect(res.status).to.have.been.calledWith(204);
+    });
+
+    it('testa se o controller retorna um erro caso o produto não seja deletado', async function () {
+      const res = {};
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'remove').resolves(products.notFound);
+      await productsController.remove(req, res);
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+
     afterEach(function () {
       sinon.restore();
     });
