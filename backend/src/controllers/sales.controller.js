@@ -12,7 +12,14 @@ const getById = async (req, res) => {
   res.status(mapStatusHTTP(status)).json(result);
 };
 
+const create = async (req, res) => {
+  const { body } = req;
+  const { status, result } = await salesService.create(body);
+  res.status(mapStatusHTTP(status)).json(result);
+};
+
 module.exports = {
   getAll,
   getById,
+  create,
 };
