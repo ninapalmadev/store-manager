@@ -25,9 +25,19 @@ const update = async (req, res) => {
   return res.status(mapStatusHTTP(status)).json(result);
 };
 
+const remove = async (req, res) => {
+  const { id } = req.params;
+  const { status, result } = await productsService.remove(id);
+  if (status === 'NOT_FOUND') {
+    return res.status(mapStatusHTTP(status)).json(result);
+  }
+  return res.status(204).end();
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  remove,
 };
